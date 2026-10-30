@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SentinelQA - Problem Statement 08 Analysis (Node.js &amp; React Blueprint)</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm 10mm 12mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #000000;
+    line-height: 1.4;
+    font-size: 8.8pt;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+
+  /* Page container */
+  .page {
+    page-break-after: always;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .page:last-child {
+    page-break-after: avoid;
+  }
+
+  /* Running header & footer */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1.5px solid #000000;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+    font-size: 7pt;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 800;
+  }
+
+  .page-footer {
+    margin-top: auto;
+    border-top: 1px solid #000000;
+    padding-top: 4px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7pt;
+    color: #444444;
+  }
+
+  /* Header banner - Monochrome Executive */
+  .hero-card {
+    background: #000000;
+    color: #ffffff;
+    padding: 15px 18px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    border: 1px solid #000000;
+  }
+
+  .hero-tagline {
+    font-size: 6.8pt;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #cccccc;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .hero-title {
+    font-size: 16pt;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 0 0 2px 0;
+    color: #ffffff;
+  }
+
+  .hero-subtitle {
+    font-size: 9pt;
+    color: #e5e5e5;
+    margin: 0 0 8px 0;
+    font-weight: 400;
+  }
+
+  .meta-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 2px;
+    font-size: 6.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #ffffff;
+  }
+
+  /* Headings */
+  h2 {
+    font-size: 10.5pt;
+    font-weight: 800;
+    color: #000000;
+    border-bottom: 1.5px solid #000000;
+    padding-bottom: 3px;
+    margin-top: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    page-break-after: avoid;
+    break-after: avoid;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  h2::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 11px;
+    background: #000000;
+    border-radius: 1px;
+  }
+
+  h3 {
+    font-size: 8.4pt;
+    font-weight: 800;
+    color: #000000;
+    margin-top: 6px;
+    margin-bottom: 3px;
+    page-break-after: avoid;
+    break-after: avoid;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin: 0 0 5px 0;
+    color: #111111;
+    text-align: justify;
+  }
+
+  /* Callout boxes */
+  .callout {
+    padding: 7px 9px;
+    border-radius: 2px;
+    margin-bottom: 6px;
+    font-size: 8pt;
+    border-left: 3.5px solid #000000;
+    background: #f7f7f7;
+    color: #000000;
+    line-height: 1.35;
+    border-top: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+    font-size: 7.5pt;
+    break-inside: avoid;
+    border: 1px solid #000000;
+  }
+
+  th {
+    background: #000000;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: left;
+    padding: 4.5px 7px;
+    border: 1px solid #000000;
+    text-transform: uppercase;
+    font-size: 7pt;
+    letter-spacing: 0.4px;
+  }
+
+  td {
+    padding: 4.5px 7px;
+    border: 1px solid #d5d5d5;
+    vertical-align: top;
+    color: #111111;
+    line-height: 1.28;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8f8f8;
+  }
+
+  /* Grid layout for features */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .card {
+    background: #ffffff;
+    border: 1.2px solid #000000;
+    border-radius: 3px;
+    padding: 7px 9px;
+    break-inside: avoid;
+  }
+
+  .card-title {
+    font-size: 7.8pt;
+    font-weight: 800;
+    color: #000000;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .card-desc {
+    font-size: 7.2pt;
+    color: #222222;
+    margin: 0;
+    line-height: 1.28;
+  }
+
+  /* Architecture Diagram Box */
+  .diagram-box {
+    background: #000000;
+    color: #ffffff;
+    border-radius: 3px;
+    padding: 9px 11px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 6.6pt;
+    line-height: 1.32;
+    margin-bottom: 8px;
+    border: 1.2px solid #000000;
+    break-inside: avoid;
+    white-space: pre;
+  }
+
+  .diagram-hl { color: #ffffff; font-weight: 800; text-decoration: underline; }
+  .diagram-muted { color: #aaaaaa; }
+
+  /* Step list */
+  ol.styled-steps {
+    margin: 0;
+    padding-left: 14px;
+    font-size: 7.8pt;
+  }
+
+  ol.styled-steps li {
+    margin-bottom: 5px;
+    color: #111111;
+    line-height: 1.32;
+  }
+
+  ol.styled-steps strong {
+    color: #000000;
+  }
+
+  code {
+    background: #eeeeee;
+    color: #000000;
+    padding: 1px 3px;
+    border-radius: 2px;
+    font-size: 7pt;
+    border: 1px solid #cccccc;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <div class="page">
+    <div class="page-header">
+      <span>INNOVISTA 36-Hour Hackathon</span>
+      <span>Problem Statement 08: SentinelQA</span>
+    </div>
+
+    <div class="hero-card">
+      <div class="hero-tagline">Architectural &amp; Engineering Specification</div>
+      <div class="hero-title">SentinelQA: The Flaky Testing Nightmare</div>
+      <div class="hero-subtitle">Autonomous UI Test Generation, Execution &amp; Runtime Self-Healing from Jira Acceptance Criteria</div>
+      <div class="meta-badges">
+        <span class="badge">Node.js + TypeScript</span>
+        <span class="badge">React + Vite</span>
+        <span class="badge">Playwright Automation</span>
+        <span class="badge">Gemini LLM Agent</span>
+      </div>
+    </div>
+
+    <h2>1. Executive Summary</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Attribute</th>
+          <th style="width: 75%;">Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Title</strong></td>
+          <td><strong>SentinelQA: The Flaky Testing Nightmare</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Domain</strong></td>
+          <td>AI &times; Software Testing &times; DevOps / CI-CD</td>
+        </tr>
+        <tr>
+          <td><strong>Core Challenge</strong></td>
+          <td>Eliminate the bottleneck between &quot;code complete&quot; and &quot;QA tested&quot; by generating, executing, and self-healing UI tests strictly derived from Jira Acceptance Criteria.</td>
+        </tr>
+        <tr>
+          <td><strong>Key Value Metric</strong></td>
+          <td>Zero-to-minimal manual QA script maintenance when frontend element locators, labels, or layout attributes shift.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>2. Deconstruction of Problem &amp; Requirements</h2>
+    <div class="callout">
+      <strong>A. The Core Problem (The Gap):</strong>
+      <ul style="margin: 2px 0 0 -15px; font-size: 7.8pt; line-height: 1.32;">
+        <li><strong>Authoring Friction:</strong> Translating English user story acceptance criteria (AC) into reliable end-to-end tests (Playwright) requires significant manual engineering time.</li>
+        <li><strong>Brittle Locators (Test Flakiness):</strong> Minor developer refactors (changing an ID from <code>#btn-submit</code> to <code>#checkout-confirm</code>, tweaking Tailwind CSS classes, or altering text from &quot;Submit&quot; to &quot;Place Order&quot;) break tests even when the feature functions properly.</li>
+        <li><strong>Maintenance Burden:</strong> QA engineers spend 30&ndash;50% of their sprints updating broken locators instead of testing new features.</li>
+      </ul>
+    </div>
+
+    <h2>3. Minimum Working Version (MVP) Breakdown</h2>
+    <p style="font-size: 7.5pt; color: #444; margin-bottom: 4px;">According to Page 20 of PS.pdf, the prototype must deliver all 5 core components:</p>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Component</th>
+          <th style="width: 38%;">Problem Statement Requirement</th>
+          <th style="width: 42%;">Node.js + React Implementation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Ticket Input</strong></td>
+          <td>Ingest acceptance criteria from Jira (live Jira REST API or mock ticket JSON/UI input).</td>
+          <td>Node.js Express backend calling Jira Cloud REST API (<code>/rest/api/3/issue/{key}</code>) with a React UI dropdown for sample tickets (E-Commerce, Auth, Todo).</td>
+        </tr>
+        <tr>
+          <td><strong>2. Test Generation</strong></td>
+          <td>Automatically synthesize executable UI test scripts from the criteria.</td>
+          <td>Gemini API generates structured TypeScript/Playwright test suites with assertion steps mapped directly to criteria.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Test Execution</strong></td>
+          <td>Run the tests against a target web app and log pass/fail status.</td>
+          <td>Node.js child-process runs Playwright test runner in headless mode, streaming execution logs, step timings, and failure screenshots over WebSockets to React.</td>
+        </tr>
+        <tr>
+          <td><strong>4. Self-Healing Engine</strong><br/><em>(Core Differentiator)</em></td>
+          <td>When a test fails due to locator mismatch, automatically locate the updated element, patch the test script, and re-execute.</td>
+          <td>Intercept locator timeout &rarr; extract live DOM &amp; accessibility tree &rarr; LLM semantic candidate ranking &rarr; Babel AST locator rewrite &rarr; automatic re-execution.</td>
+        </tr>
+        <tr>
+          <td><strong>5. Audit &amp; Reporting</strong></td>
+          <td>Visual dashboard detailing tests passed, failed, and healed.</td>
+          <td>React dashboard rendering step timelines, before/after locator diffs, repair confidence scores, and script change audit logs.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-footer">
+      <span>SentinelQA Blueprint &bull; INNOVISTA 2026</span>
+      <span>Page 1 of 4</span>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <div class="page">
+    <div class="page-header">
+      <span>Self-Healing Engine &amp; Bonus Goals</span>
+      <span>Technical Mechanics</span>
+    </div>
+
+    <h2>4. Deep-Dive: Designing the Self-Healing Engine</h2>
+    <div class="diagram-box">
+  <span class="diagram-hl">[ Jira Issue / Mock Ticket ]</span> &rarr; Extract Acceptance Criteria (Given / When / Then)
+             &darr;
+  <span class="diagram-hl">[ AI Generator Agent (Gemini API) ]</span> &rarr; Generate Playwright TypeScript Test Script
+             &darr;
+  <span class="diagram-hl">[ Node.js Playwright Runner Worker ]</span> &rarr; Execute Against Target Web Application
+             &darr;
+      &plus;-------------------+-------------------+
+      |                   |                   |
+   <span class="diagram-hl">[ PASS ]</span>           <span class="diagram-hl">[ TIMEOUT / LOCATOR ERROR ]</span>     <span class="diagram-hl">[ HARD ASSERTION FAIL ]</span>
+      |                   |                   |
+      |          <span class="diagram-muted">[ Capture Failure Telemetry ]</span>        &rarr; Log Genuine Product Bug
+      |          &bull; Failed Selector &amp; Code Location
+      |          &bull; Current Page DOM &amp; Accessibility Tree
+      |          &bull; Page Viewport Screenshot
+      |                   &darr;
+      |          <span class="diagram-hl">[ SentinelQA Semantic Matcher ]</span>
+      |          &bull; Filter Interactive Elements (buttons, inputs, links)
+      |          &bull; Multi-Attribute Semantic Similarity Scoring
+      |                   &darr;
+      |          <span class="diagram-hl">[ Babel AST Locator Rewriter ]</span> &rarr; Patch selector in test script
+      |                   &darr;
+      |          <span class="diagram-hl">[ Re-Run Healed Test Suite ]</span>
+      |                   &darr;
+      +--------&gt; <span class="diagram-hl">[ React Live Audit &amp; Reporting Dashboard ]</span> &lt;--------+
+                 &bull; Healed Selector Diff Log (<code>old &rarr; new</code>)
+                 &bull; Real-time Console Log Streaming (WebSocket)
+                 &bull; Optional: Jira Result &amp; Comment Pushback
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">&bull; Distinguish Locator Drift vs True Regressions</div>
+        <p class="card-desc">
+          <strong>Locator Drift:</strong> The element still exists and carries out the intended user action, but its ID, CSS classes, or inner text shifted during refactoring. &rarr; <strong>Self-Heal.</strong><br/>
+          <strong>True Bug / Regression:</strong> The backend API returns 500, data is not saved, or the element was completely deleted without replacement. &rarr; <strong>Report Product Bug.</strong>
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">&bull; Multi-Attribute Candidate Scoring</div>
+        <p class="card-desc">
+          Calculate semantic and structural similarity across four key axes:<br/>
+          1. <strong>Tag &amp; ARIA Role (25%):</strong> Confirms candidate matches interaction type (<code>button</code>, <code>link</code>, <code>input</code>).<br/>
+          2. <strong>Text Similarity (35%):</strong> Cosine similarity between expected label and current candidate text.<br/>
+          3. <strong>DOM Hierarchy (20%):</strong> Proximity to sibling fields, forms, and parent containers.<br/>
+          4. <strong>Accessibility Attributes (20%):</strong> Matches <code>aria-label</code>, <code>name</code>, and placeholders.
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 6px;">
+      <div class="card-title">&bull; Babel AST Locator Rewriter (Safe Deterministic Code Patching)</div>
+      <p class="card-desc">
+        Instead of prompting an LLM to regenerate the entire script (which risks syntax errors, hallucinated test flows, or test logic drift), SentinelQA parses the test script with <strong>Babel AST (<code>@babel/parser</code>)</strong>, traverses to the exact locator call node, replaces only the selector argument (e.g., <code>page.locator('#submit-btn')</code> &rarr; <code>page.locator('button:has-text("Place Order")')</code>), and regenerates clean code using <code>@babel/generator</code>.
+      </p>
+    </div>
+
+    <h2>5. Bonus Goals &amp; Hackathon Differentiators (Page 21)</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">&bull; Jira Two-Way Sync</div>
+        <p class="card-desc">Post execution results, failure traces, execution screenshots, and healed locator diffs directly back to the Jira ticket via Jira REST API as comments, updating status to <em>"QA Verified"</em>.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">&bull; Flaky Test Detection (Monte Carlo)</div>
+        <p class="card-desc">Execute tests repeatedly (N = 5) under synthetic CPU throttling and simulated network jitter (3G) to differentiate asynchronous race conditions from deterministic locator failures.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">&bull; Visual Regression Checks</div>
+        <p class="card-desc">Integrate Pixelmatch to compare baseline screenshots with post-change screenshots, isolating cosmetic visual modifications from functional DOM breakages.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">&bull; Integrated Demo Sandbox App</div>
+        <p class="card-desc">Include a built-in React demo application with a prominent &quot;Simulate Refactor&quot; toggle that mutates IDs, classes, and labels in real time to demonstrate live self-healing in front of judges.</p>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>SentinelQA Blueprint &bull; INNOVISTA 2026</span>
+      <span>Page 2 of 4</span>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 3 ==================== -->
+  <div class="page">
+    <div class="page-header">
+      <span>Technical Stack &amp; Dependencies</span>
+      <span>Node.js &amp; React Ecosystem</span>
+    </div>
+
+    <h2>6. Recommended Technical Architecture (Node.js &amp; React)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 18%;">Layer</th>
+          <th style="width: 32%;">Technology Choice</th>
+          <th style="width: 50%;">Architecture Role &amp; Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Frontend</strong></td>
+          <td>React 18 + Vite + Tailwind CSS + Lucide Icons</td>
+          <td>High-performance dashboard with real-time test execution timeline, Monaco editor for live test preview, and visual diff viewer for healed scripts.</td>
+        </tr>
+        <tr>
+          <td><strong>Backend API</strong></td>
+          <td>Node.js (v20+) + Express + TypeScript</td>
+          <td>Handles Jira REST API calls, coordinates LLM generation, launches Playwright test processes, and performs AST script patching.</td>
+        </tr>
+        <tr>
+          <td><strong>Real-Time Comms</strong></td>
+          <td>WebSockets (<code>ws</code>)</td>
+          <td>Full-duplex streaming of Playwright console output, live step progress, execution screenshots, and healing notifications.</td>
+        </tr>
+        <tr>
+          <td><strong>Test Automation</strong></td>
+          <td>Playwright (<code>@playwright/test</code>)</td>
+          <td>Headless Chromium browser execution, locator tracing, accessibility tree snapshots, and failure screenshot capture.</td>
+        </tr>
+        <tr>
+          <td><strong>AI Engine</strong></td>
+          <td>Gemini API (<code>@google/genai</code>)</td>
+          <td>Rapid-latency LLM inference for initial test generation from criteria and semantic DOM element matching during self-healing.</td>
+        </tr>
+        <tr>
+          <td><strong>AST Manipulation</strong></td>
+          <td>Babel (<code>@babel/parser</code>, <code>@babel/traverse</code>, <code>@babel/generator</code>)</td>
+          <td>Parses test scripts into syntax trees, replaces broken locator strings safely, and produces deterministic code patches.</td>
+        </tr>
+        <tr>
+          <td><strong>Demo Target App</strong></td>
+          <td>Embedded React Storefront with Mutation Engine</td>
+          <td>Self-contained e-commerce store with an interactive &quot;Mutate UI&quot; button that breaks locators on demand for judge demonstrations.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>7. Comprehensive Dependency Blueprint (Node.js &amp; React)</h2>
+    
+    <div class="grid-2">
+      <!-- Backend Card -->
+      <div class="card" style="padding: 6px 8px;">
+        <div class="card-title">&bull; Backend (Node.js / Express in <code>backend/package.json</code>)</div>
+        <table style="margin-bottom: 0; font-size: 7.2pt;">
+          <thead>
+            <tr>
+              <th style="width: 45%;">Package</th>
+              <th style="width: 55%;">Role in SentinelQA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>express</code>, <code>cors</code>, <code>dotenv</code></td><td>REST API, CORS for React, and <code>.env</code> key management.</td></tr>
+            <tr><td><code>ws</code></td><td>WebSocket server streaming live test logs &amp; step status.</td></tr>
+            <tr><td><code>playwright</code>, <code>@playwright/test</code></td><td>Headless browser runner, DOM extraction, and screenshots.</td></tr>
+            <tr><td><code>@google/genai</code></td><td>Gemini SDK for AC test synthesis and semantic healing.</td></tr>
+            <tr><td><code>@babel/parser</code>, <code>@babel/traverse</code>, <code>@babel/generator</code></td><td>Parses script into AST, updates locator, regenerates code.</td></tr>
+            <tr><td><code>axios</code></td><td>Jira Cloud REST API integration (fetch &amp; post comments).</td></tr>
+            <tr><td><code>diff</code></td><td>Generates unified git-style text diff of healed locator.</td></tr>
+            <tr><td><code>pixelmatch</code>, <code>pngjs</code></td><td>Visual regression pixel diffing for screenshots.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Frontend Card -->
+      <div class="card" style="padding: 6px 8px;">
+        <div class="card-title">&bull; Frontend (React / Vite in <code>frontend/package.json</code>)</div>
+        <table style="margin-bottom: 0; font-size: 7.2pt;">
+          <thead>
+            <tr>
+              <th style="width: 45%;">Package</th>
+              <th style="width: 55%;">Role in SentinelQA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>react</code>, <code>react-dom</code>, <code>vite</code></td><td>High-speed modern single page application framework.</td></tr>
+            <tr><td><code>tailwindcss</code>, <code>postcss</code>, <code>autoprefixer</code></td><td>Monochrome utility-first responsive layout &amp; dashboard styling.</td></tr>
+            <tr><td><code>lucide-react</code></td><td>Minimalist icons for statuses (Passed, Failed, Healed, Jira).</td></tr>
+            <tr><td><code>@monaco-editor/react</code></td><td>Embedded VS Code editor to view generated Playwright tests.</td></tr>
+            <tr><td><code>react-diff-viewer-continued</code></td><td>Side-by-side or inline code diff viewer for healed scripts.</td></tr>
+            <tr><td><code>axios</code></td><td>API client triggering generation, test runs, and Jira queries.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>SentinelQA Blueprint &bull; INNOVISTA 2026</span>
+      <span>Page 3 of 4</span>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 4 ==================== -->
+  <div class="page">
+    <div class="page-header">
+      <span>Roadmap &amp; Execution Strategy</span>
+      <span>36-Hour Hackathon Plan</span>
+    </div>
+
+    <h2>8. 36-Hour Implementation Roadmap with Dependency Mapping</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 14%;">Time Window</th>
+          <th style="width: 25%;">Phase &amp; Dependencies</th>
+          <th style="width: 61%;">Action Items &amp; Milestone Deliverables</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hours 00 &ndash; 06</strong></td>
+          <td><strong>Phase 1: Testbed &amp; Target App</strong><br/>
+          <code>react</code>, <code>vite</code>, <code>tailwindcss</code>, <code>express</code></td>
+          <td>
+            &bull; Initialize monorepo structure in <code>backend/</code> and <code>frontend/</code>.<br/>
+            &bull; Build the demo web app (E-Commerce store) with a &quot;Simulate Refactor&quot; toggle (swaps button IDs, changes classes, modifies button labels).<br/>
+            &bull; Set up basic Express HTTP API and health-check endpoints.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Hours 06 &ndash; 14</strong></td>
+          <td><strong>Phase 2: Ticket Ingestion &amp; Test Generation</strong><br/>
+          <code>axios</code>, <code>@google/genai</code>, <code>dotenv</code></td>
+          <td>
+            &bull; Implement Jira REST API client + mock ticket JSON store (E-Commerce, Auth, Profile).<br/>
+            &bull; Engineer few-shot prompt for Gemini to transform Given-When-Then criteria into clean Playwright scripts.<br/>
+            &bull; Verify generated scripts pass basic TypeScript/JavaScript syntax validation.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Hours 14 &ndash; 20</strong></td>
+          <td><strong>Phase 3: Execution &amp; Failure Telemetry</strong><br/>
+          <code>playwright</code>, <code>ws</code>, <code>@playwright/test</code></td>
+          <td>
+            &bull; Build execution harness launching Playwright in headless mode.<br/>
+            &bull; Stream execution logs, step timings, and screenshots over WebSockets to React.<br/>
+            &bull; Intercept locator timeout exceptions; capture page DOM snapshot, accessibility tree, and failed locator.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Hours 20 &ndash; 28</strong></td>
+          <td><strong>Phase 4: Self-Healing Logic &amp; AST Patching</strong><br/>
+          <code>@babel/parser</code>, <code>@babel/traverse</code>, <code>@babel/generator</code>, <code>diff</code></td>
+          <td>
+            &bull; Implement multi-attribute candidate scoring engine comparing failed element with live DOM.<br/>
+            &bull; Build Babel AST rewriter to substitute broken locator string in test file without touching test logic.<br/>
+            &bull; Trigger automated re-run of healed script; verify green status and log unified <code>diff</code>.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Hours 28 &ndash; 33</strong></td>
+          <td><strong>Phase 5: Frontend Dashboard &amp; Live Demo Flow</strong><br/>
+          <code>@monaco-editor/react</code>, <code>react-diff-viewer-continued</code>, <code>lucide-react</code></td>
+          <td>
+            &bull; Complete React dashboard: Jira ticket selector, execution runner console, and Monaco code diff viewer.<br/>
+            &bull; Wire up Jira webhook / comment pushback showing test results and repair logs.<br/>
+            &bull; Conduct live test runs validating end-to-end self-healing cycle under 2 seconds.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Hours 33 &ndash; 36</strong></td>
+          <td><strong>Phase 6: Rehearsal &amp; Hardening</strong><br/>
+          <em>End-to-End Testing</em></td>
+          <td>
+            &bull; Rehearse 4-step live pitch (Criteria &rarr; Baseline Pass &rarr; Mutate UI &rarr; Autonomous Heal &rarr; Green Pass).<br/>
+            &bull; Add fallback offline mock responses to guarantee seamless presentation even if network stutters.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>9. Hackathon Rules &amp; Strict Compliance Checklist</h2>
+    <div class="grid-2">
+      <div class="card" style="border-left: 3.5px solid #000000;">
+        <strong>[x] Safe Targets Only:</strong> Execute exclusively against our local demo app or open testing sites (e.g., SauceDemo). Zero probing of external commercial apps.
+      </div>
+      <div class="card" style="border-left: 3.5px solid #000000;">
+        <strong>[x] Transparent Audit Logging:</strong> Every repaired locator logs exact timestamps, previous selector, healed selector, semantic confidence score, and rationale.
+      </div>
+      <div class="card" style="border-left: 3.5px solid #000000;">
+        <strong>[x] Live System Execution:</strong> All test runs, failure interceptions, and DOM inspections execute live in real browsers with zero mock delays or hardcoded values.
+      </div>
+      <div class="card" style="border-left: 3.5px solid #000000;">
+        <strong>[x] Secure Credential Protection:</strong> Strict environment isolation via <code>.env</code> for API tokens; zero plain-text secrets in repository files or client bundles.
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: 5px;">
+      <strong>Summary Recommendation:</strong> SentinelQA built on Node.js and React provides maximum developer velocity and flawless integration with Playwright. Using Babel AST for in-place locator substitution ensures safe, deterministic healing without code hallucinations, creating an unbeatable hackathon demo.
+    </div>
+
+    <div class="page-footer">
+      <span>SentinelQA Blueprint &bull; INNOVISTA 2026</span>
+      <span>Page 4 of 4</span>
+    </div>
+  </div>
+
+</body>
+</html>
